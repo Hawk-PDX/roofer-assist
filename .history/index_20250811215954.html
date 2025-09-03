@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        body {
+            width: 320px;
+            padding: 16px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            background: #f8f9fa;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #1a73e8;
+            font-weight: 600;
+        }
+        
+        .measurement-section {
+            background: white;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #202124;
+        }
+        
+        .measure-btn {
+            width: 100%;
+            padding: 12px;
+            background: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .measure-btn:hover {
+            background: #1557b0;
+        }
+        
+        .measure-btn:disabled {
+            background: #dadce0;
+            cursor: not-allowed;
+        }
+        
+        .results {
+            display: none;
+        }
+        
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 8px 0;
+            padding: 8px 0;
+            border-bottom: 1px solid #e8eaed;
+        }
+        
+        .result-label {
+            color: #5f6368;
+            font-size: 13px;
+        }
+        
+        .result-value {
+            font-weight: 600;
+            color: #202124;
+            font-size: 13px;
+        }
+        
+        .status {
+            text-align: center;
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin: 8px 0;
+        }
+        
+        .status.info {
+            background: #e8f0fe;
+            color: #1a73e8;
+        }
+        
+        .status.error {
+            background: #fce8e6;
+            color: #d93025;
+        }
+        
+        .instructions {
+            font-size: 12px;
+            color: #5f6368;
+            line-height: 1.4;
+            margin-top: 8px;
+        }
+        
+        .toggle-advanced {
+            background: none;
+            border: none;
+            color: #1a73e8;
+            font-size: 12px;
+            cursor: pointer;
+            text-decoration: underline;
+            margin-top: 8px;
+        }
+        
+        .advanced-options {
+            display: none;
+            margin-top: 12px;
+        }
+        
+        .input-group {
+            margin: 8px 0;
+        }
+        
+        .input-group label {
+            display: block;
+            font-size: 12px;
+            color: #5f6368;
+            margin-bottom: 4px;
+        }
+        
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        🏠 Roof Measurement Tool
+    </div>
+    
+    <div class="status info" id="status">
+        Navigate to Google Maps or Bing Maps to start measuring
+    </div>
+    
+    <div class="measurement-section">
+        <div class="section-title">Quick Measurement</div>
+        <button class="measure-btn" id="startMeasurement">Start Roof Measurement</button>
+        <div class="instructions">
+            Click to activate measurement mode on supported map services. Click corners of the roof to measure area and calculate materials needed.
+        </div>
+        
+        <button class="toggle-advanced" id="toggleAdvanced">Advanced Options ▼</button>
+        
+        <div class="advanced-options" id="advancedOptions">
+            <div class="input-group">
+                <label>Roof Type:</label>
+                <select id="roofType">
+                    <option value="gable">Gable</option>
+                    <option value="hip">Hip</option>
+                    <option value="shed">Shed</option>
+                    <option value="mansard">Mansard</option>
+                    <option value="gambrel">Gambrel</option>
+                </select>
+            </div>
+            
+            <div class="input-group">
+                <label>Estimated Pitch (rise:run):</label>
+                <select id="roofPitch">
+                    <option value="2:12">2:12 (Low Slope)</option>
+                    <option value="4:12">4:12 (Standard)</option>
+                    <option value="6:12" selected>6:12 (Standard)</option>
+                    <option value="8:12">8:12 (Steep)</option>
+                    <option value="10:12">10:12 (Steep)</option>
+                    <option value="12:12">12:12 (45°)</option>
+                </select>
+            </div>
+            
+            <div class="input-group">
+                <label>Construction Year (for age estimation):</label>
+                <input type="number" id="constructionYear" min="1900" max="2025" placeholder="Optional">
+            </div>
+        </div>
+    </div>
+    
+    <div class="measurement-section results" id="results">
+        <div class="section-title">Measurement Results</div>
+        
+        <div class="result-item">
+            <span class="result-label">Ground Area:</span>
+            <span class="result-value" id="groundArea">--</span>
+        </div>
+        
+        <div class="result-item">
+            <span class="result-label">Roof Area:</span>
+            <span class="result-value" id="roofArea">--</span>
+        </div>
+        
+        <div class="result-item">
+            <span class="result-label">Roof Pitch:</span>
+            <span class="result-value" id="calculatedPitch">--</span>
+        </div>
+        
+        <div class="result-item">
+            <span class="result-label">Shingle Squares:</span>
+            <span class="result-value" id="shingleSquares">--</span>
+        </div>
+        
+        <div class="result-item">
+            <span class="result-label">Estimated Age:</span>
+            <span class="result-value" id="roofAge">--</span>
+        </div>
+        
+        <div class="result-item">
+            <span class="result-label">Material Estimate:</span>
+            <span class="result-value" id="materialCost">--</span>
+        </div>
+    </div>
+    
+    <script src="popup.js"></script>
+</body>
+</html>

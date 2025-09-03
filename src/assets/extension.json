@@ -1,0 +1,39 @@
+{
+  "manifest_version": 3,
+  "name": "Roof Measurement Tool",
+  "version": "1.0",
+  "description": "Measure roof dimensions, pitch, and calculate shingle requirements",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://*.google.com/*",
+    "https://*.bing.com/*",
+    "https://*.mapbox.com/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Roof Measurement Tool"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://*.google.com/maps/*",
+        "https://*.bing.com/maps/*"
+      ],
+      "js": ["content.js"],
+      "css": ["content.css"]
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["measurement-overlay.html"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

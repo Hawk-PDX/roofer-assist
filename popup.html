@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roof Measurement Tool</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="popup-container">
+        <header>
+            <h1>📐 Roof Measurement</h1>
+            <div id="status" class="status info">Ready to measure</div>
+        </header>
+
+        <main>
+            <div class="controls">
+                <button id="startMeasurement" class="btn btn-primary" disabled>
+                    Start Roof Measurement
+                </button>
+            </div>
+
+            <div class="options">
+                <button id="toggleAdvanced" class="btn btn-secondary">
+                    Advanced Options ▼
+                </button>
+                
+                <div id="advancedOptions" class="advanced-options" style="display: none;">
+                    <div class="form-group">
+                        <label for="roofType">Roof Type:</label>
+                        <select id="roofType">
+                            <option value="gable">Gable</option>
+                            <option value="hip">Hip</option>
+                            <option value="shed">Shed</option>
+                            <option value="flat">Flat</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="roofPitch">Roof Pitch:</label>
+                        <select id="roofPitch">
+                            <option value="4:12">4:12 (Low)</option>
+                            <option value="6:12" selected>6:12 (Medium)</option>
+                            <option value="8:12">8:12 (Steep)</option>
+                            <option value="12:12">12:12 (Very Steep)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="constructionYear">Construction Year:</label>
+                        <input type="number" id="constructionYear" min="1900" max="2024" placeholder="e.g., 1995">
+                    </div>
+                </div>
+            </div>
+
+            <div id="results" class="results" style="display: none;">
+                <h3>Measurement Results</h3>
+                
+                <div class="result-item">
+                    <span class="label">Ground Area:</span>
+                    <span id="groundArea" class="value">-</span>
+                </div>
+                
+                <div class="result-item">
+                    <span class="label">Roof Area:</span>
+                    <span id="roofArea" class="value">-</span>
+                </div>
+                
+                <div class="result-item">
+                    <span class="label">Roof Pitch:</span>
+                    <span id="calculatedPitch" class="value">-</span>
+                </div>
+                
+                <div class="result-item">
+                    <span class="label">Shingle Squares:</span>
+                    <span id="shingleSquares" class="value">-</span>
+                </div>
+                
+                <div class="result-item">
+                    <span class="label">Roof Age:</span>
+                    <span id="roofAge" class="value">Unknown</span>
+                </div>
+                
+                <div class="result-item">
+                    <span class="label">Material Cost:</span>
+                    <span id="materialCost" class="value">-</span>
+                </div>
+                
+                <div class="actions">
+                    <button id="exportBtn" class="btn btn-secondary">Export</button>
+                    <button id="saveBtn" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="popup.js"></script>
+</body>
+</html>
